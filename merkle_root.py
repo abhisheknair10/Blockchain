@@ -6,12 +6,12 @@ def double_sha256(arg):
 
 #
 """
+
 def tx_encrypt(txlist):
     txlist_hashed = []
     for i in range(len(txlist)):
         txlist_hashed.append(double_sha256(txlist[i]))
     return txlist_hashed
-"""
 
 #
 def findMerkleRoot(txlist):
@@ -31,4 +31,7 @@ def layerXMerkle(txlist, txlen):
                 inter_list.append(double_sha256(txlist[i] + txlist[i]))
             else:
                 inter_list.append(double_sha256(txlist[i] + txlist[i+1]))
+    print(inter_list)
     return inter_list
+
+"""
