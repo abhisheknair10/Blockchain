@@ -5,7 +5,7 @@ import time
 import json
 start_time = time.time()
 
-class ChainLinkBlock:
+class Block:
     def __init__(self, previous_block_hash, txlist):
         self.previous_block_hash = previous_block_hash
         self.txlist = txlist
@@ -46,7 +46,7 @@ def main():
 
     y = json.dumps(y)
 
-    new_block = ChainLinkBlock(
+    new_block = Block(
         "bcca8a3082f6f7aa527c4a04ea1058e69a1096e7c53060271ac9d25fd0e98438", 
         [x, y]
     )
