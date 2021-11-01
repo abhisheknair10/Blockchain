@@ -11,7 +11,8 @@ class Block:
         self.txlist = txlist
         self.nonce = 0
 
-        self.block_data_raw = previous_block_hash + '\n' + '\n'.join(txlist) + '\n'
+        print('\n'.join(txlist))
+        self.block_data_raw = previous_block_hash + '\n' + merkle_root.findMerkleRoot(str('\n'.join(txlist))) + '\n'
 
         while(True):
             self.block_data = self.block_data_raw + str(self.nonce)
@@ -22,29 +23,13 @@ class Block:
             self.nonce += 1
 
 def main():
-    x = {
-        'subcat' : 'manu',
-        'org' : 'Apple',
-        'prod' : 'iPhone',
-        'prno' : '13 Pro',
-        'proid' : 'A12I90N2GN953',
-        'dnt' : '6:22:50 12-10-2021',
-        'loc' : 'China'
-        }
-    x = json.dumps(x)
+    x = "{'subcat' : 'manu', 'org' : 'Apple', 'prod' : 'iPhone', 'prno' : '13 Pro', 'proid' : 'A12I90N2GN953', 'dnt' : '6:22:50 12-10-2021', 'loc' : 'China'}"
+    x = str(json.dumps(x))
 
-    y = {
-        'subcat' : 'distr',
-        'org' : 'Apple',
-        'prod' : 'iPhone',
-        'prno' : '12 Pro',
-        'proid' : 'A12IQFN2GX9UP',
-        'dnt' : '6:24:03 12-10-2021',
-        'loc' : 'CN',
-        'dest' : 'USA'
-    }
+    y = "{ 'subcat' : 'distr', 'org' : 'Apple', 'prod' : 'iPhone', 'prno' : '12 Pro', 'proid' : 'A12IQFN2GX9UP', 'dnt' : '6:24:03 12-10-2021', 'loc' : 'CN', 'dest' : 'USA'}"
 
-    y = json.dumps(y)
+    y = str(json.dumps(y))
+    print(type(y))
 
     new_block = Block(
         "bcca8a3082f6f7aa527c4a04ea1058e69a1096e7c53060271ac9d25fd0e98438", 
