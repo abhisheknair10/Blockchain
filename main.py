@@ -17,6 +17,7 @@ class Block:
         while(True):
             self.block_data = self.block_data_raw + str(self.nonce)
             self.block_hash = merkle_root.double_sha256(self.block_data)
+            print(self.block_hash)
             if(validation.leading_zeros(self.block_hash)):
                 print(self.block_data)
                 break
