@@ -1,0 +1,40 @@
+{
+    "previous_hash": "000001651cbf6c6269414ceb429338bb94c1e9b0a03bcbeec92ee336e40bec3c",
+    "transaction_list": [
+        {
+            "sender": "Charlie",
+            "recipient": "Eve",
+            "amount": 818.5,
+            "tx_hash": "ca041575b636909f9605604efa7d0aa00ae1478376c0a372a5221102898a6c6d"
+        },
+        {
+            "sender": "Charlie",
+            "recipient": "Charlie",
+            "amount": 992.15,
+            "tx_hash": "bbb6a7089a9cfa0b63c3684a6c84dc0abf849bfd84ee21dde35db1335b5ba694"
+        },
+        {
+            "sender": "Charlie",
+            "recipient": "Dave",
+            "amount": 686.68,
+            "tx_hash": "2cc6ab031d536760cb9fc09cca7f65cdfadf2b5b12a9e42c365b8aaa8a689704"
+        }
+    ],
+    "merkle_tree": [
+        [
+            "ca041575b636909f9605604efa7d0aa00ae1478376c0a372a5221102898a6c6d",
+            "bbb6a7089a9cfa0b63c3684a6c84dc0abf849bfd84ee21dde35db1335b5ba694",
+            "2cc6ab031d536760cb9fc09cca7f65cdfadf2b5b12a9e42c365b8aaa8a689704"
+        ],
+        [
+            "cb31446e5a841c7a2c4c1d563bd693d949098d009e55dc6e14252af0a3c0a53c",
+            "408bb5fe2e0d32ea769b9cc2bf2f8cb3b3563b4d71912ee24608e6832fdbdec2"
+        ],
+        [
+            "4c947b1c49ffb89bd6bd0e6d1b93892166dea3ab5e43cf7b6a3359a63d2fb387"
+        ]
+    ],
+    "merkle_root": "4c947b1c49ffb89bd6bd0e6d1b93892166dea3ab5e43cf7b6a3359a63d2fb387",
+    "block_hash": "00000cb95f4995e0bb739c85882be2716c9c38dbac8d7c6acafab30b6edd380f",
+    "nonce": 445832
+}

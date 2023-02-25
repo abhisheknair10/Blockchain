@@ -1,0 +1,81 @@
+{
+    "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "transaction_list": [
+        {
+            "sender": "Alice",
+            "recipient": "Dave",
+            "amount": 195.65,
+            "tx_hash": "f8eb8286ffc39662919fd6b12559d070441f8d284b0720fa66b9a41edcb9dd71"
+        },
+        {
+            "sender": "Bob",
+            "recipient": "Eve",
+            "amount": 725.92,
+            "tx_hash": "083c40aeb118509187c14b98f98436901ee1d60b7d472a8453b2b5ecd6070b2f"
+        },
+        {
+            "sender": "Charlie",
+            "recipient": "Charlie",
+            "amount": 690.59,
+            "tx_hash": "4a01d27723217e4a1013e1bc76f9d7bda0ce935654ada051e361dce591ba18e2"
+        },
+        {
+            "sender": "Dave",
+            "recipient": "Charlie",
+            "amount": 584.75,
+            "tx_hash": "f790f079bb15a845dc7a3efd27d174eef0c62106df10499a5462f798ce7d982d"
+        },
+        {
+            "sender": "Bob",
+            "recipient": "Bob",
+            "amount": 296.38,
+            "tx_hash": "369cfa5db18211747be2cd7c30ac7fba789c6dbe93314f9d54af853cef422c2a"
+        },
+        {
+            "sender": "Bob",
+            "recipient": "Dave",
+            "amount": 415.0,
+            "tx_hash": "4e0691387faa2dd702e0844270f5c70a400f844b800fe7f9d6f7d36e63edcc1d"
+        },
+        {
+            "sender": "Bob",
+            "recipient": "Charlie",
+            "amount": 407.87,
+            "tx_hash": "6900d56d748b128ac64965ef5f144f2ee6d42542fc4c1bd89b9d04057f75a413"
+        },
+        {
+            "sender": "Charlie",
+            "recipient": "Charlie",
+            "amount": 497.38,
+            "tx_hash": "cfffef33cdb26a51547aea15c9f10ea0ee45af8f576fd4f67260b4a7e8082ee2"
+        }
+    ],
+    "merkle_tree": [
+        [
+            "f8eb8286ffc39662919fd6b12559d070441f8d284b0720fa66b9a41edcb9dd71",
+            "083c40aeb118509187c14b98f98436901ee1d60b7d472a8453b2b5ecd6070b2f",
+            "4a01d27723217e4a1013e1bc76f9d7bda0ce935654ada051e361dce591ba18e2",
+            "f790f079bb15a845dc7a3efd27d174eef0c62106df10499a5462f798ce7d982d",
+            "369cfa5db18211747be2cd7c30ac7fba789c6dbe93314f9d54af853cef422c2a",
+            "4e0691387faa2dd702e0844270f5c70a400f844b800fe7f9d6f7d36e63edcc1d",
+            "6900d56d748b128ac64965ef5f144f2ee6d42542fc4c1bd89b9d04057f75a413",
+            "cfffef33cdb26a51547aea15c9f10ea0ee45af8f576fd4f67260b4a7e8082ee2"
+        ],
+        [
+            "c35cce41347ab64c4199fcb1999cb0dc9b8c9127bef85cbb0385741d7cbde00d",
+            "6d2d919ff0daf7277aecb347dc9572c89be3c3671e85d2bb24be65ed4434251e",
+            "3aeb7ed293f1cda3992d50d227d459ff1913af0c002a35fc3a9bef1db68493cf",
+            "69e1aacd702ce20aead9e7e2663da71b0bdfd9aeba99bdcabc41ac1f88b855ad"
+        ],
+        [
+            "65819864b28c062e6ad79d8ffea46bd060b95ad10774384df1144a3a25a4c7f7",
+            "3a473497376a7580da80fefc9f0a988642fc2433488b62dc849fc30e99fb94ef"
+        ],
+        [
+            "2426e78408a6e5b5db012426286012a04c0f99f3fc8c5c111b5140eef161a3e4"
+        ]
+    ],
+    "merkle_root": "2426e78408a6e5b5db012426286012a04c0f99f3fc8c5c111b5140eef161a3e4",
+    "block_hash": "000000697e8b3ba4897117a51b5fe88491a42c22e4f18a7644e8bab335abb743",
+    "nonce": 314330
+}

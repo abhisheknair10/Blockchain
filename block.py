@@ -55,7 +55,8 @@ class Transaction:
 class Block:
 
     def __init__(self, transaction_list: List[Transaction]) -> None:
-
+        col, rows = os.get_terminal_size()
+        print("=" * col)
         PrintOrange(orange="Mining Block...", white="")
 
         self.leading_zeros = 5
@@ -72,6 +73,7 @@ class Block:
         PrintGreen(green=f"Block {self.block_num} Mined", white="")
         PrintGreen(green=f"Block Hash: ", white=f"{self.block_hash}")
         PrintGreen(green=f"Nonce: ", white=f"{self.nonce}")
+        print("=" * col)
     
     def get_previous_hash(self) -> str:
         if not os.path.isfile('blockchain/Block0.json'):
