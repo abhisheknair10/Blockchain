@@ -1,66 +1,211 @@
 import hashlib
 from typing import *
-from hashinglibrary import HashingLibrary
-from transaction import Transaction
+from copy import deepcopy
+import os
+import json
+import glob
+
+
+class PrintGreen:
+    def __init__(self, green: str, white: str) -> None:
+        print(" " * 100, end='\r')
+        print('\033[92m' + green + '\033[0m' + white)
+
+
+class PrintOrange:
+    def __init__(self, orange: str, white: str) -> None:
+        print('\033[93m' + orange + '\033[0m' + white, end='\r')
+
+
+class HashingLib:
+    
+    def doubleSHA256(arg: bytes) -> str:
+        return hashlib.sha256(
+            hashlib.sha256(
+                arg
+            ).hexdigest().encode()
+        ).hexdigest()
+
+
+class Transaction:
+
+    def __init__(self, sender: str, recipient: str, amount: float) -> None:
+        self.sender = sender
+        self.recipient = recipient
+        self.amount = amount
+        self.tx_hash = self.get_tx_hash()
+
+    
+    def get_tx_hash(self) -> str:
+        return HashingLib.doubleSHA256(
+            str(self.sender).encode() + 
+            str(self.recipient).encode() + 
+            str(self.amount).encode()
+        )
+    
+    def get_tx_details(self) -> str:
+        return {
+            'sender': self.sender,
+            'recipient': self.recipient,
+            'amount': self.amount,
+            'tx_hash': self.tx_hash
+        }
+    
 
 class Block:
-    
-    def __init__(self, transaction_list: List[Transaction], previous_hash: str) -> None:
-        self.condition = 3
+
+    def __init__(self, transaction_list: List[Transaction]) -> None:
+
+        PrintOrange(orange="Mining Block...", white="")
+
+        self.leading_zeros = 5
+        self.previous_hash = self.get_previous_hash()
         self.transaction_list = transaction_list
-        self.previous_hash = previous_hash
+        self.merkle_tree = self.build_merkle_tree()
+        self.merkle_root = self.get_merkle_root()
+        self.block_hash = None
         self.nonce = 0
-        self.merkle_root = self.get_merkle_root([tx.get_tx_hash() for tx in self.transaction_list])
-        self.block_hash = self.get_block_hash()
+        self.block_num = None
+        self.compute_block_hash()
+        self.save_block()
 
+        PrintGreen(green=f"Block {self.block_num} Mined", white="")
+        PrintGreen(green=f"Block Hash: ", white=f"{self.block_hash}")
+        PrintGreen(green=f"Nonce: ", white=f"{self.nonce}")
     
-    def get_merkle_root(self, depth_list: List) -> str:
-        if(len(depth_list) % 2 != 0):
-            depth_list.append(depth_list[-1])
+    def get_previous_hash(self) -> str:
+        if not os.path.isfile('blockchain/Block0.json'):
+            return "0" * 64
 
-        rec_depth_list = []
-        for i in range(0, len(depth_list), 2):
-            rec_depth_list.append(
-                HashingLibrary.doubleSHA256(
-                    str(depth_list[i + 0]).encode() + 
-                    str(depth_list[i + 1]).encode()
-                )
-            )
+        file_count = len(glob.glob1('blockchain/',"*.json"))
+
+        with open(f'blockchain/Block{file_count-1}.json', 'r') as f:
+            block_data = json.load(f)
+
+        return block_data['block_hash']
+
+    def build_merkle_tree(self) -> List[str]:
+        self.merkle_tree = []
+        self.merkle_tree.append([tx.tx_hash for tx in self.transaction_list])
+
+        if len(self.merkle_tree[0]) == 0:
+            return None
+
+        if len(self.merkle_tree[0]) == 1:
+            return self.merkle_tree[0]
+
+        current_level = self.merkle_tree[0]
+        while len(current_level) > 1:
+            next_level = []
+            duplicate = False
             
-        if(len(rec_depth_list) != 1):
-            return self.get_merkle_root(rec_depth_list)
-        return depth_list[0]
+            if len(current_level) % 2 == 1:
+                duplicate = True
+                current_level.append(current_level[-1])
 
+            for i in range(0, len(current_level), 2):
+                next_level.append(
+                    HashingLib.doubleSHA256(
+                        current_level[i].encode() + current_level[i+1].encode()
+                    )
+                )
+
+            if duplicate:
+                current_level.pop()
+
+            self.merkle_tree.append(next_level)
+            current_level = deepcopy(next_level)
+
+        return self.merkle_tree
+
+    def get_merkle_root(self) -> str:
+        return self.merkle_tree[-1][0]
+
+    def compute_block_hash(self):
+        Mine = Miner(self, leading_zeros=self.leading_zeros)
+        block_hash = Mine.mine()
     
-    def get_block_hash(self):
-        hash_calc = HashingLibrary.doubleSHA256(
-            str(self.previous_hash).encode() + 
-            str(self.nonce).encode() + 
-            str(self.merkle_root).encode()
-        )
+    def save_block(self):
+        if not os.path.isfile('blockchain/Block0.json'):
+            self.block_num = 0
+            with open('blockchain/Block0.json', 'w') as f:
+                f.write(json.dumps({
+                    'previous_hash': self.previous_hash,
+                    'transaction_list': [tx.get_tx_details() for tx in self.transaction_list],
+                    'merkle_tree': self.merkle_tree,
+                    'merkle_root': self.merkle_root,
+                    'block_hash': self.block_hash,
+                    'nonce': self.nonce
+                }, indent=4))
 
-        while(not self.hash_condition(hash_calc, self.condition)):
-            self.nonce += 1
-            hash_calc = HashingLibrary.doubleSHA256(
-                str(self.previous_hash).encode() + 
-                str(self.nonce).encode() + 
-                str(self.merkle_root).encode()
+        else:
+            file_count = len(glob.glob1('blockchain/',"*.json"))
+            self.block_num = file_count
+            with open(f'blockchain/Block{file_count}.json', 'w') as f:
+                f.write(json.dumps({
+                    'previous_hash': self.previous_hash,
+                    'transaction_list': [tx.get_tx_details() for tx in self.transaction_list],
+                    'merkle_tree': self.merkle_tree,
+                    'merkle_root': self.merkle_root,
+                    'block_hash': self.block_hash,
+                    'nonce': self.nonce
+                }, indent=4))
+
+
+class Miner:
+
+    def __init__(self, block: Block, leading_zeros: int) -> None:
+        self.block = block
+        self.leading_zeros = leading_zeros
+
+    def mine(self) -> str:
+        while True:
+            inter_hash = HashingLib.doubleSHA256(
+                str(self.block.previous_hash).encode() +
+                str(self.block.merkle_root).encode() +
+                str(self.block.nonce).encode()
             )
-        
-        return hash_calc
+
+            if inter_hash[:self.leading_zeros] == "0" * self.leading_zeros:
+                self.block.block_hash = inter_hash
+                break
+
+            self.block.nonce += 1
+
+        return self.block.block_hash
 
 
-    def hash_condition(self, hash: str, units: int) -> bool:
-        return hash[0:units] == ("0" * units)
-
+class Verify:
     
-    def output_block_data(self) -> None:
-        print('\033[93m' + '='*93 + '\033[0m')
-        print('\033[92m' + '[Prev] Block Hash:       ' + '\033[0m' + str(self.previous_hash))
-        print('\033[92m' + '[Curr] Block Nonce:       ' + '\033[0m' + str(self.nonce))
-        print('\033[92m' + '[Curr] Block Merkle Root: ' + '\033[0m' + str(self.merkle_root))
-        print('\033[92m' + '[Curr] Block Hash:        ' + '\033[0m' + str(self.block_hash))
-        print('\033[91m' + '='*93 + '\033[0m')
+    def verify_transaction(block_num: int, transaction: Transaction) -> bool:
+        with open(f'blockchain/Block{block_num}.json', 'r') as f:
+            block_data = json.load(f)
 
+        for tx in block_data['transaction_list']:
+            if tx['tx_hash'] == transaction.tx_hash:
+                merkle_root = block_data['merkle_root']
+                merkle_tree = block_data['merkle_tree']
+                current_level = merkle_tree[0]
+                for i in range(1, len(merkle_tree)):
+                    next_level = []
+                    double = False
+                    if len(current_level) % 2 == 1:
+                        double = True
+                        current_level.append(current_level[-1])
 
+                    for j in range(0, len(current_level), 2):
+                        next_level.append(
+                            HashingLib.doubleSHA256(
+                                current_level[j].encode() + current_level[j+1].encode()
+                            )
+                        )   
 
+                    if double:
+                        current_level.pop()
+
+                    current_level = deepcopy(next_level)
+
+                if current_level[0] == merkle_root:
+                    return True
+
+        return False

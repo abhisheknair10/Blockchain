@@ -1,7 +1,6 @@
 import hashlib
 from typing import *
-from transaction import Transaction
-from block import Block
+from block import *
 
 
 def main():
@@ -26,13 +25,8 @@ def main():
 
     transaction_list = [tx1, tx2, tx3]
 
-    block = Block(
-        transaction_list, 
-        "0000000000000000000000000000000000000000000000000000000000000000"
-    )
+    block = Block(transaction_list=transaction_list)
 
-    block.output_block_data()
-    
 
 
 if __name__ == "__main__":
