@@ -1,2 +1,1 @@
-# Blockchain Technology based Solutions
-
+# Blockchain Implementation in Python
